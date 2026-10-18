@@ -1,0 +1,4 @@
+interface:
+  display_name: "CleverSQL"
+  short_description: "Agent-safe SQLite/PostgreSQL access"
+  default_prompt: "Use CleverSQL to inspect the database, preview any write, review the diff, then apply or revert."
