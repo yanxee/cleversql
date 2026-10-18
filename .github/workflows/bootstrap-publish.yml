@@ -1,0 +1,51 @@
+name: Publish CleverSQL v0.2.0
+
+on:
+  push:
+    paths:
+      - bootstrap-source.b64
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Materialize source
+        run: |
+          test -s bootstrap-source.b64
+          base64 -d bootstrap-source.b64 > /tmp/cleversql-source.tar.gz
+          tar -xzf /tmp/cleversql-source.tar.gz -C .
+          rm -f bootstrap-source.b64 .github/workflows/bootstrap-publish.yml
+
+      - name: Verify release
+        run: |
+          npm ci
+          npm test
+          npm run check
+
+      - name: Commit source
+        run: |
+          git config user.name "yanxee"
+          git config user.email "yanxee@yeah.net"
+          git add -A
+          git commit -m "feat: add CleverSQL v0.2.0 source"
+          git push origin HEAD:master
+
+      - name: Package
+        run: npm pack
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v0.2.0 cleversql-0.2.0.tgz \
+            --target master \
+            --title "CleverSQL v0.2.0" \
+            --notes "Agent-safe data workspace for SQLite and PostgreSQL. Read-only SQL, governed preview/apply/revert, conflict detection, MCP, and auditable changes."
