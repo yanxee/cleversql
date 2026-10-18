@@ -4,6 +4,8 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-c8ff62.svg)](LICENSE)
 [![Node.js 24.10+](https://img.shields.io/badge/node-%3E%3D24.10-c8ff62.svg)](package.json)
 
+**超轻量数据库访问接口**
+
 **The agent-safe data workspace.**
 
 > Query freely. Change carefully.
