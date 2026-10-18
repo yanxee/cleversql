@@ -1,0 +1,56 @@
+{
+  "name": "cleversql",
+  "version": "0.2.0",
+  "description": "The agent-safe data workspace for SQLite and PostgreSQL. Query freely, change carefully.",
+  "author": "yanxee",
+  "homepage": "https://github.com/yanxee/cleversql#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yanxee/cleversql.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yanxee/cleversql/issues"
+  },
+  "type": "module",
+  "bin": {
+    "cleversql": "./bin/cleversql.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "public",
+    "scripts",
+    "docs",
+    "README.md",
+    "SECURITY.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning ./bin/cleversql.js demo",
+    "test": "node --disable-warning=ExperimentalWarning --test",
+    "test:watch": "node --disable-warning=ExperimentalWarning --test --watch",
+    "test:postgres": "node --disable-warning=ExperimentalWarning --test ./test/postgres.integration.test.js",
+    "demo:90s": "node --disable-warning=ExperimentalWarning ./scripts/demo-90s.mjs",
+    "check": "node --check ./bin/cleversql.js && node --check ./src/server.js && node --check ./src/postgres-adapter.js && node --check ./src/mcp.js && node --check ./public/app.js && node --check ./scripts/demo-90s.mjs",
+    "prepublishOnly": "npm test"
+  },
+  "engines": {
+    "node": ">=24.10"
+  },
+  "keywords": [
+    "sqlite",
+    "postgresql",
+    "supabase",
+    "sql",
+    "mcp",
+    "agents",
+    "database",
+    "data-ops",
+    "ai"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "pg": "^8.23.1"
+  }
+}

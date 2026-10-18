@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="CleverSQL is the agent-safe data workspace. Query freely, change carefully."
+    />
+    <meta name="theme-color" content="#0b0d0c" />
+    <title>CleverSQL — Agent-safe data workspace</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#overview" aria-label="CleverSQL home">
+          <span class="brand-mark" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </span>
+          <span class="brand-copy">
+            <strong>CleverSQL</strong>
+            <small>data control plane</small>
+          </span>
+        </a>
+
+        <nav class="nav" aria-label="Primary navigation">
+          <button class="nav-item active" data-view="overview" aria-label="Overview">
+            <span class="nav-icon" aria-hidden="true">⌂</span>
+            <span>Overview</span>
+            <kbd>1</kbd>
+          </button>
+          <button class="nav-item" data-view="tables" aria-label="Data browser">
+            <span class="nav-icon" aria-hidden="true">▦</span>
+            <span>Data browser</span>
+            <kbd>2</kbd>
+          </button>
+          <button class="nav-item" data-view="query" aria-label="SQL lab">
+            <span class="nav-icon mono-icon" aria-hidden="true">›_</span>
+            <span>SQL lab</span>
+            <kbd>3</kbd>
+          </button>
+          <button class="nav-item" data-view="changes" aria-label="Changes">
+            <span class="nav-icon" aria-hidden="true">⇄</span>
+            <span>Changes</span>
+            <span class="nav-badge" id="pending-badge">0</span>
+          </button>
+          <button class="nav-item" data-view="connect" aria-label="Connect">
+            <span class="nav-icon" aria-hidden="true">⌁</span>
+            <span>Connect</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-note">
+          <div class="status-dot"></div>
+          <div>
+            <strong id="sidebar-db">Connecting…</strong>
+            <span id="sidebar-mode">SQLite workspace</span>
+          </div>
+        </div>
+
+        <div class="safety-seal">
+          <span class="seal-icon">◎</span>
+          <div>
+            <strong>Write protocol</strong>
+            <span>Preview → apply → revert</span>
+          </div>
+        </div>
+
+        <div class="sidebar-footer">
+          <span>v<span id="version-label">0.2.0</span></span>
+          <a href="#connect">MCP ready</a>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="crumb">
+            <span>Workspace</span>
+            <span class="crumb-slash">/</span>
+            <strong id="page-crumb">Overview</strong>
+          </div>
+          <div class="topbar-actions">
+            <span class="agent-pill" id="agent-pill">
+              <span class="pulse"></span>
+              Agent-ready
+            </span>
+            <button class="button button-ghost compact" id="open-query-top">
+              <span class="mono">›_</span> Query
+            </button>
+            <button class="button button-primary compact" id="new-change-top">
+              <span>+</span> Preview change
+            </button>
+          </div>
+        </header>
+
+        <div class="view-stack">
+          <section class="view active" id="view-overview">
+            <div class="hero-card">
+              <div class="hero-copy">
+                <div class="eyebrow">
+                  <span class="eyebrow-line"></span>
+                  Local-first · agent-native
+                </div>
+                <h1>
+                  Query freely.<br />
+                  <span>Change carefully.</span>
+                </h1>
+                <p>
+                  One safe interface for humans and agents to understand data,
+                  inspect intent, and change it without losing the plot.
+                </p>
+                <div class="hero-actions">
+                  <button class="button button-primary" id="hero-query">
+                    Open SQL lab <span>↗</span>
+                  </button>
+                  <button class="button button-ghost" id="hero-change">
+                    Simulate a change
+                  </button>
+                </div>
+                <div class="hero-badges">
+                  <span><i class="badge-dot lime"></i> Read-only SQL</span>
+                  <span><i class="badge-dot amber"></i> Reviewed writes</span>
+                  <span><i class="badge-dot blue"></i> Reversible audit</span>
+                </div>
+              </div>
+
+              <div class="hero-visual" aria-label="CleverSQL change flow">
+                <div class="visual-orbit orbit-one"></div>
+                <div class="visual-orbit orbit-two"></div>
+                <div class="visual-card preview-card">
+                  <div class="mini-label">01 · PREVIEW</div>
+                  <div class="mini-row">
+                    <span>customers</span>
+                    <code>#1842</code>
+                  </div>
+                  <div class="mini-diff">
+                    <span class="strike">trial</span>
+                    <span class="arrow">→</span>
+                    <strong>active</strong>
+                  </div>
+                </div>
+                <div class="visual-card guard-card">
+                  <div class="guard-ring">
+                    <span>◎</span>
+                  </div>
+                  <div>
+                    <strong>1 row matched</strong>
+                    <span>No drift detected</span>
+                  </div>
+                </div>
+                <div class="visual-card applied-card">
+                  <div class="mini-label">03 · APPLIED</div>
+                  <div class="check-line">
+                    <span class="check">✓</span>
+                    <div>
+                      <strong>Change committed</strong>
+                      <span>Audit ID · chg_7f31c9</span>
+                    </div>
+                  </div>
+                </div>
+                <svg class="flow-line" viewBox="0 0 340 470" fill="none" aria-hidden="true">
+                  <path d="M82 104C82 175 245 153 245 236C245 320 94 304 94 365" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="metric-grid">
+              <article class="metric-card">
+                <div class="metric-head">
+                  <span>Schema surface</span>
+                  <span class="metric-icon">▦</span>
+                </div>
+                <strong id="metric-tables">—</strong>
+                <p><span id="metric-columns">—</span> columns across <span id="metric-views">0</span> views</p>
+              </article>
+              <article class="metric-card">
+                <div class="metric-head">
+                  <span>Rows in reach</span>
+                  <span class="metric-icon">≋</span>
+                </div>
+                <strong id="metric-rows">—</strong>
+                <p>Read access capped at <span id="metric-row-cap">500</span> rows / query</p>
+              </article>
+              <article class="metric-card metric-highlight">
+                <div class="metric-head">
+                  <span>Governed changes</span>
+                  <span class="metric-icon">⇄</span>
+                </div>
+                <strong id="metric-changes">—</strong>
+                <p><span id="metric-pending">0</span> awaiting review · <span id="metric-applied">0</span> applied</p>
+              </article>
+            </div>
+
+            <div class="overview-grid">
+              <article class="panel schema-panel">
+                <div class="panel-head">
+                  <div>
+                    <span class="panel-kicker">Live schema</span>
+                    <h2>Your data, with a map</h2>
+                  </div>
+                  <button class="text-button" data-goto="tables">Explore all <span>↗</span></button>
+                </div>
+                <div class="table-list" id="overview-tables"></div>
+              </article>
+
+              <article class="panel protocol-panel">
+                <div class="panel-head">
+                  <div>
+                    <span class="panel-kicker">The contract</span>
+                    <h2>Nothing changes by accident</h2>
+                  </div>
+                  <span class="protocol-tag">Enforced</span>
+                </div>
+                <div class="protocol-steps">
+                  <div class="protocol-step">
+                    <span class="step-num">01</span>
+                    <div>
+                      <strong>Preview the intent</strong>
+                      <p>Resolve exact rows and show a row-level diff inside a rolled-back transaction.</p>
+                    </div>
+                    <span class="step-state done">Safe</span>
+                  </div>
+                  <div class="protocol-step">
+                    <span class="step-num">02</span>
+                    <div>
+                      <strong>Detect drift</strong>
+                      <p>Refuse to apply if anything changed after the preview.</p>
+                    </div>
+                    <span class="step-state live">Live</span>
+                  </div>
+                  <div class="protocol-step">
+                    <span class="step-num">03</span>
+                    <div>
+                      <strong>Keep the receipt</strong>
+                      <p>Every reason, actor, diff and rollback is stored locally.</p>
+                    </div>
+                    <span class="step-state">Audit</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="panel mcp-panel">
+                <div class="mcp-top">
+                  <span class="panel-kicker">Agent transport</span>
+                  <span class="live-dot"><i></i> Listening</span>
+                </div>
+                <h2>One endpoint.<br />Eight safe tools.</h2>
+                <p>
+                  Bring the agent you already use. CleverSQL speaks MCP and returns
+                  structured diffs, conflict errors, and audit IDs.
+                </p>
+                <div class="endpoint-row">
+                  <code id="mcp-endpoint">http://127.0.0.1:4310/mcp</code>
+                  <button class="icon-button" id="copy-endpoint" title="Copy MCP endpoint">⧉</button>
+                </div>
+                <button class="button button-ghost full" data-goto="connect">
+                  View connection setup <span>↗</span>
+                </button>
+              </article>
+
+              <article class="panel activity-panel">
+                <div class="panel-head">
+                  <div>
+                    <span class="panel-kicker">Change ledger</span>
+                    <h2>Recent intent</h2>
+                  </div>
+                  <button class="text-button" data-goto="changes">Full ledger <span>↗</span></button>
+                </div>
+                <div class="activity-list" id="recent-changes"></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="view" id="view-tables">
+            <div class="view-heading">
+              <div>
+                <div class="eyebrow"><span class="eyebrow-line"></span>Schema explorer</div>
+                <h1>Data browser</h1>
+                <p>Inspect the shape and sample rows before you query or change anything.</p>
+              </div>
+              <button class="button button-ghost" id="refresh-tables">↻ Refresh schema</button>
+            </div>
+            <div class="browser-layout">
+              <aside class="browser-sidebar panel">
+                <div class="browser-search">
+                  <span>⌕</span>
+                  <input id="table-filter" type="search" placeholder="Filter tables…" autocomplete="off" />
+                </div>
+                <div id="table-browser-list" class="browser-list"></div>
+              </aside>
+              <section class="panel table-detail" id="table-detail">
+                <div class="skeleton-block"></div>
+              </section>
+            </div>
+          </section>
+
+          <section class="view" id="view-query">
+            <div class="view-heading query-heading">
+              <div>
+                <div class="eyebrow"><span class="eyebrow-line"></span>Read-only by construction</div>
+                <h1>SQL lab</h1>
+                <p>Explore at full speed. The connection itself refuses writes.</p>
+              </div>
+              <div class="query-actions">
+                <select id="query-presets" class="select" aria-label="Query presets">
+                  <option value="">Load a question…</option>
+                  <option value="active-mrr">Where is active MRR concentrated?</option>
+                  <option value="renewals">What renews in the next 30 days?</option>
+                  <option value="overdue">Which invoices are overdue?</option>
+                  <option value="recent">What happened in the last 7 days?</option>
+                </select>
+                <button class="button button-primary" id="run-query">
+                  Run query <span class="key-hint">⌘↵</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="query-workspace">
+              <div class="editor-panel panel">
+                <div class="editor-toolbar">
+                  <div class="editor-tabs">
+                    <span class="editor-tab active">query.sql</span>
+                    <span class="editor-mode"><i></i> read-only</span>
+                  </div>
+                  <span class="editor-hint">SQLite · parameterized</span>
+                </div>
+                <div class="editor-body">
+                  <div class="line-rail" id="line-rail">1<br />2<br />3<br />4<br />5<br />6<br />7<br />8</div>
+                  <textarea id="sql-editor" spellcheck="false" aria-label="SQL query editor">SELECT
+  c.name,
+  c.company,
+  s.plan_code,
+  s.mrr,
+  s.renews_at
+FROM customers c
+JOIN subscriptions s ON s.customer_id = c.id
+WHERE s.status = 'active'
+ORDER BY s.mrr DESC
+LIMIT 12;</textarea>
+                </div>
+                <div class="editor-footer">
+                  <span id="editor-status"><i class="status-dot-inline"></i> Ready</span>
+                  <span>Writes blocked at the connection layer</span>
+                </div>
+              </div>
+
+              <div class="result-panel panel" id="query-results">
+                <div class="result-empty">
+                  <div class="result-empty-icon">›_</div>
+                  <h2>Ask the database</h2>
+                  <p>Run a query, or load one of the guided questions above.</p>
+                  <div class="suggestion-chips">
+                    <button data-preset="active-mrr">Active MRR</button>
+                    <button data-preset="renewals">Upcoming renewals</button>
+                    <button data-preset="overdue">Overdue invoices</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="view" id="view-changes">
+            <div class="view-heading">
+              <div>
+                <div class="eyebrow"><span class="eyebrow-line"></span>Every write has a why</div>
+                <h1>Change ledger</h1>
+                <p>Review pending intents, apply verified diffs, or roll back an earlier change.</p>
+              </div>
+              <button class="button button-primary" id="new-change-ledger">+ New change</button>
+            </div>
+            <div class="ledger-toolbar">
+              <div class="filter-tabs" id="change-filters">
+                <button class="active" data-status="all">All</button>
+                <button data-status="preview">Preview</button>
+                <button data-status="applied">Applied</button>
+                <button data-status="reverted">Reverted</button>
+              </div>
+              <button class="text-button" id="refresh-changes">↻ Refresh</button>
+            </div>
+            <div class="change-ledger" id="change-ledger"></div>
+          </section>
+
+          <section class="view" id="view-connect">
+            <div class="view-heading">
+              <div>
+                <div class="eyebrow"><span class="eyebrow-line"></span>Built for the agent era</div>
+                <h1>Connect an agent</h1>
+                <p>Give any MCP client a safe, structured way to work with your database.</p>
+              </div>
+              <span class="agent-pill large"><span class="pulse"></span>Streamable HTTP</span>
+            </div>
+
+            <div class="connect-grid">
+              <article class="panel connect-primary">
+                <span class="panel-kicker">MCP endpoint</span>
+                <h2>Point. Connect. Guard.</h2>
+                <p class="connect-lede">
+                  Agents get schema discovery, read-only SQL, governed change previews,
+                  conflict detection, and rollback through one endpoint.
+                </p>
+                <div class="big-endpoint">
+                  <code id="connect-endpoint">http://127.0.0.1:4310/mcp</code>
+                  <button class="button button-primary compact" id="copy-config">Copy config</button>
+                </div>
+                <div class="client-picker" id="client-picker"></div>
+                <div class="config-block">
+                  <div class="config-head">
+                    <span id="config-label">mcp.json</span>
+                    <button id="copy-json" class="mono-button">copy</button>
+                  </div>
+                  <pre id="config-json"></pre>
+                </div>
+                <div class="client-command" id="client-command" hidden></div>
+                <div class="client-location" id="client-location"></div>
+                <div class="connect-footnote">
+                  <span class="lock-icon">⌾</span>
+                  <div>
+                    <strong>Local by default.</strong>
+                    <span>The server binds to 127.0.0.1. External binding requires a bearer token.</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="panel tools-panel">
+                <span class="panel-kicker">Agent toolbox</span>
+                <h2>Eight primitives, one contract</h2>
+                <div class="tool-grid" id="tool-grid"></div>
+              </article>
+
+              <article class="panel contract-panel">
+                <span class="panel-kicker">Write contract</span>
+                <h2>Autonomy without recklessness</h2>
+                <div class="contract-list">
+                  <div>
+                    <span class="contract-icon lime">01</span>
+                    <p><strong>No raw write SQL.</strong> Agents submit a typed operation, not arbitrary mutation code.</p>
+                  </div>
+                  <div>
+                    <span class="contract-icon amber">02</span>
+                    <p><strong>Every write is previewed.</strong> The exact before and after rows are returned before commit.</p>
+                  </div>
+                  <div>
+                    <span class="contract-icon blue">03</span>
+                    <p><strong>Stale intent fails closed.</strong> A changed row invalidates the preview instead of being overwritten.</p>
+                  </div>
+                  <div>
+                    <span class="contract-icon red">04</span>
+                    <p><strong>Rollback is a first-class tool.</strong> Applied changes can be restored with conflict checks.</p>
+                  </div>
+                </div>
+              </article>
+
+              <article class="panel install-panel">
+                <span class="panel-kicker">Run it anywhere</span>
+                <h2>No extra service to babysit.</h2>
+                <p>One process. SQLite or PostgreSQL. Your existing agent client.</p>
+                <div class="command-row">
+                  <code>npx cleversql demo</code>
+                  <button class="mono-button" id="copy-command">copy</button>
+                </div>
+                <div class="install-meta">
+                  <span>Node 24.10+</span>
+                  <span>Local audit</span>
+                  <span>MIT licensed</span>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <div id="modal-root"></div>
+    <div id="toast-root" class="toast-root" aria-live="polite"></div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
